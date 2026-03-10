@@ -8,14 +8,17 @@ import Transactions from './pages/Transactions';
 import ComponentsShowcase from './pages/ComponentsShowcase';
 import './App.css';
 
-function App() {
+const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem('token');
-  const isAuthenticated = !!token;
+  if (token) return <Navigate to="/" replace />;
+  return <>{children}</>;
+};
 
+function App() {
   return (
     <Routes>
-      <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
-      <Route path="/register" element={isAuthenticated ? <Navigate to="/" replace /> : <Register />} />
+      <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+      <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
       <Route path="/components" element={<ComponentsShowcase />} />
 
       <Route element={<DashboardLayout />}>
